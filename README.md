@@ -51,8 +51,7 @@ The dataset is stored in JSON format with the following structure:
         ["Header1", "Header2", "Header3"],
         ["Value1", "Value2", "Value3"]
       ]
-    },
-    ...
+    }
   ],
   "instances": [
     {
@@ -67,8 +66,7 @@ The dataset is stored in JSON format with the following structure:
       "gpt-4.1_label": "answerable",
       "gemini-2.5-pro-label": "answerable",
       "claude-sonnet-4-label": "answerable"
-    },
-    ...
+    }
   ]
 }
 ```
@@ -218,9 +216,9 @@ The evaluation script uses these definitions to correctly parse and compare nume
 If you use this dataset, please cite:
 
 ```bibtex
-@inproceedings{faith2024,
+@inproceedings{faith2025,
   title={FAITH: A Framework for Assessing Intrinsic Tabular Hallucinations in Finance},
-  author={[Authors]},
+  author={Mengao Zhang and Jiayu Fu and Tanya Warrier and Yuwen Wang and Tianhui Tan and Ke-wei Huang},
   booktitle={ACM International Conference on AI in Finance (ICAIF)},
   year={2025},
   url={https://www.arxiv.org/abs/2508.05201}
