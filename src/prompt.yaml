@@ -1,0 +1,81 @@
+system_prompt: |
+  You are a professional financial analyst.
+
+user_prompt_answerability_annotation: |
+  You are given the following tables from a 10k annual report:
+  {tables_with_pretext}
+
+  Filing date: {filing_date}
+  And the sentence: {pre_sentence} {sentence} {post_sentence}
+
+  Your task:
+  - For each highlighted span substring (shown as <SPAN>{{span}}</SPAN>) in the sentence, determine if the span is:
+    - unanswerable: Spans that
+        - do not represent some type of numeric financial data (e.g., phone numbers, pincodes, or any other noise), or
+        - the span cannot be derived from or supported by the table by any method.
+    - answerable:  Spans that
+        - can be directly found in the table, or
+        - can be derived through some calculations (such as addition, subtraction, multiplication, or division), or
+        - can be inferred via deeper reasoning involving multiple table entries
+
+  Instructions:
+  (1) Carefully analyse every given table and the given sentence.
+  (2) For each <SPAN>{{span}}</SPAN> in the sentence: Label the {{span}} as answerable or unanswerable
+  (3) Provide a concise explanation for your reasoning.
+
+  Output Format:
+  ```json
+  {{
+    "reasoning": <A detailed explanation for each highlighted span in the sentence - if it is answerable: how it can be matched, derived, or inferred from the table, or else if it is unanswerable: a brief reason why.>
+    "spans": {{
+      "<span1>" : "answerable" | "unanswerable",
+      ...
+    }}
+  }}
+  ```
+
+user_prompt_prediction: |
+  Your task is to fill in the masked blank in a sentence using the provided financial data tables.
+  Hint: The masked content is a single positive value that fits the context {unit_description}
+
+  **Instructions:**
+
+  1.  **Analyze the Request:** Carefully read the sentence and examine the provided tables to understand what information is needed to fill in the blank.
+  2.  **Reason Step-by-Step:** Before providing the final answer, write out your reasoning process. Explain how you will find the value, including any calculations.
+      - If you are extracting a value, mention which table and cell you are getting it from.
+      - If you are performing a calculation, show the formula and the values you are using.
+  3.  **Categorize Your Reasoning:** Based on your reasoning, classify it into one of the following scenarios:
+      - **A. Direct Lookup:** The value is directly extracted from a single cell in a table.
+      - **B. Simple Calculation (Single Metric):** The result is calculated from a single metric across different time periods, categories, or rows (e.g., calculating a year-over-year change).
+      - **C. Simple Calculation (Two Metrics):** The result is calculated using two different metrics (e.g., calculating a ratio).
+      - **D. Complex Calculation:** The reasoning involves more than two metrics or multiple complex steps.
+  4.  **Format the Final Answer:** After your reasoning, provide the final answer in a JSON block with the following structure.
+
+  **JSON Output Format:**
+  ```json
+  {{
+      "results": {{
+          "answer": "<The calculated or extracted value>",
+          "scenario": "<A, B, C, or D>",
+          "necessary_metrics": ["<metric_name_1>", "<metric_name_2>", ...],
+          "reference": ["<table_identifier_1>", "<table_identifier_2>", ...]
+      }}
+  }}
+  ```
+
+  **Field Explanations:**
+  - `answer`: The value to fill in the masked blank. Format it professionally (i.e., with rounding and units, etc.).
+  - `scenario`: One of "A", "B", "C", or "D" based on your reasoning.
+  - `necessary_metrics`: A list of all metric names from the tables required to derive the answer.
+  - `reference`: A list of all table identifiers for the tables used.
+
+  **Inputs:**
+
+  **Tables:**
+  {tables_with_pretext}
+
+  **Sentence:**
+  {pre_sentence}
+  {masked_sentence}
+  {post_sentence}
+

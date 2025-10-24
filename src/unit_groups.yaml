@@ -1,0 +1,185 @@
+units:
+  bps:
+    description: Basis points, a common finance unit (0.01%)
+    scale: 1e-4
+    aliases:
+      - basis points ("bps")
+      - basis points ('bps')
+      - basis point ("bps")
+      - basis point ('bps')
+      - bps
+      - basis points
+      - basis point
+      - basis-points
+      - basis-point
+  boe:
+    description: Barrel of oil equivalent (energy sector)
+    aliases:
+      - BOE
+      - boe
+      - MBOE
+      - MBOE per day
+      - MMBOE
+      - BBOE
+      - mboe
+      - mmboe
+      - bboe
+  cps:
+    description: Cents per share (financial earnings metric)
+    aliases:
+      - cps
+      - cent per share
+      - cents per share
+      - ¢/sh
+  eps:
+    description: Earnings per share (finance)
+    aliases:
+      - eps
+      - earning per share
+      - earnings per share
+      - $/sh
+  kwh:
+    description: Kilowatt-hour (energy consumption)
+    aliases:
+      - kWh
+      - kilowatt hour
+      - kilowatt-hour
+      - kWhs
+  btu:
+    description: British Thermal Unit (energy)
+    aliases:
+      - btu
+      - BTU
+      - British thermal unit
+      - BTUs
+  square_feet:
+    description: Unit of area (estate)
+    aliases:
+      - square feet
+  million:
+    description: Million (number scaling, often used as a financial unit)
+    scale: 1e6
+    aliases:
+      - million
+      - MM
+      - mn
+      - m
+      - M
+      - mio
+  billion:
+    description: Billion (number scaling, often used as a financial unit)
+    scale: 1e9
+    aliases:
+      - billion
+      - bn
+      - B
+      - bln
+  trillion:
+    description: Trillion (number scaling, often used as a financial unit)
+    scale: 1e12
+    aliases:
+      - trillion
+      - tn
+      - T
+  thousand:
+    description: Thousand (number scaling, often used as a financial unit)
+    scale: 1e3
+    aliases:
+      - thousand
+      - K
+      - k
+  per_share:
+    description: Per share (used as postfix in financial metrics)
+    aliases:
+      - per share
+      - /sh
+      - /share
+      - per-sh
+  per_annum:
+    description: Per annum, or annualized (used as postfix, especially in rates)
+    aliases:
+      - per annum
+      - per year
+      - pa
+      - p.a.
+      - /yr
+      - yearly
+      - annually
+  per_month:
+    description: Per month, or monthly (used as postfix)
+    aliases:
+      - per month
+      - monthly
+      - /mo
+      - p.m.
+      - pm
+  usd:
+    description: U.S. Dollars (currency)
+    aliases:
+      - USD
+      - $
+      - US dollars
+      - US$
+      - dollar
+      - dollars
+  eur:
+    description: Euro (currency)
+    aliases:
+      - EUR
+      - €
+      - euro
+      - euros
+  gbp:
+    description: British Pounds (currency)
+    aliases:
+      - GBP
+      - £
+      - pound
+      - pounds
+  jpy:
+    description: Japanese Yen (currency)
+    aliases:
+      - JPY
+      - ¥
+      - yen
+      - yens
+  per_unit:
+    description: Generic "per unit" (e.g. per barrel, per ton, per sq ft, etc.)
+    aliases:
+      - per unit
+      - /unit
+      - per bbl
+      - /bbl
+      - per barrel
+      - /barrel
+      - per ton
+      - /ton
+      - per tonne
+      - /tonne
+      - per mt
+      - /mt
+      - per sq ft
+      - /sq ft
+      - per sqft
+      - /sqft
+      - per square foot
+      - /square foot
+      - per square meter
+      - /sqm
+      - /m²
+      - per m²
+  percent:
+    description: Percent-based suffixes, prefixes, and phrases (ratios, changes, and rates)
+    scale: 1e-2
+    aliases:
+      - percent
+      - percentage
+      - -percent
+      - -percentage
+      - "%"
+      - pct
+      - "%age"
+      - perc.
+      - per cent
+      - pc
+      - p.c.
