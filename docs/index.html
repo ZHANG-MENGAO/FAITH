@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAITH | Intrinsic Tabular Hallucination Benchmark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top-nav">
+    <div class="brand">
+      <span class="brand-mark">FAITH</span>
+      <span class="brand-subtitle">Hallucination Benchmark</span>
+    </div>
+    <nav>
+      <a href="#abstract">Abstract</a>
+      <a href="#contributions">Methodology</a>
+      <a href="#dataset">Dataset</a>
+      <a href="#evaluation">Evaluation</a>
+      <a href="#usage">Usage</a>
+      <a href="#team">Team</a>
+      <a href="#citation">Citation</a>
+      <a class="pill" href="https://www.arxiv.org/abs/2508.05201" target="_blank" rel="noopener">Paper</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-grid">
+        <div class="hero-main">
+          <p class="eyebrow">ICAIF '25 · Singapore</p>
+          <h1>FAITH: A Framework for Assessing Intrinsic Tabular Hallucinations in Finance</h1>
+          <p class="lede">
+            A domain-specific benchmark and methodology for measuring hallucinations in large language models tasked with financial table reasoning.
+          </p>
+          <div class="cta-row">
+            <a class="cta primary" href="https://www.arxiv.org/pdf/2508.05201" target="_blank" rel="noopener">View PDF</a>
+            <a class="cta outline" href="https://github.com/ZHANG-MENGAO/FAITH" target="_blank" rel="noopener">GitHub Repo</a>
+            <a class="cta ghost" href="#citation">Cite</a>
+          </div>
+          <div class="stat-row">
+            <div class="stat-card surface">
+              <span class="label">Companies</span>
+              <span class="value emphasis">9 (pilot) · 453 (main)</span>
+              <p>Sampled from S&amp;P 500 annual reports (Item 7) with paired financial tables.</p>
+            </div>
+            <div class="stat-card surface">
+              <span class="label">Answerable spans</span>
+              <span class="value emphasis">300 · 2,406</span>
+              <p>Context-aware masked spans validated for uniqueness, consistency, and answerability.</p>
+            </div>
+            <div class="stat-card surface">
+              <span class="label">Reasoning scenarios</span>
+              <span class="value emphasis">4</span>
+              <p>Direct lookup, comparative, bivariate, and multivariate calculations over tables.</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-aside">
+          <div class="callout gradient">
+            <p class="overline">Key Idea</p>
+            <p>Evaluate intrinsic hallucinations by asking LLMs to recover masked spans in financial narratives, grounded by the surrounding tables and context sentences.</p>
+          </div>
+          <div class="callout gradient">
+            <p class="overline">Annotation Pipeline</p>
+            <ul>
+              <li>Mask spans that satisfy uniqueness and consistency.</li>
+              <li>Filter with LLM-based answerability annotation.</li>
+              <li>Normalize units and numerics for precision-relaxed scoring.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="abstract">
+      <div class="section-header">
+        <p class="eyebrow">Abstract</p>
+        <h2>Reliable tabular reasoning is central to financial AI</h2>
+      </div>
+      <div class="section-body two-col">
+        <p>
+          Financial applications demand trustworthy numerical reasoning. FAITH introduces a rigorous, scalable benchmark that probes
+          intrinsic hallucinations in LLMs by framing evaluation as masked span prediction over real 10-K filings.
+          The framework joins structured table context with neighboring sentences, revealing how models mis-handle values,
+          units, and cross-table calculations.
+        </p>
+        <div class="highlight">
+          <p class="overline">Contributions</p>
+          <ul>
+            <li>Automated dataset creation via principled masking of financial narratives.</li>
+            <li>New hallucination benchmark built from S&amp;P 500 annual reports.</li>
+            <li>Cross-model study of intrinsic hallucination patterns across reasoning scenarios.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contributions">
+      <div class="section-header">
+        <p class="eyebrow">Methodology</p>
+        <h2>Masked spans grounded by tables and surrounding text</h2>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <p class="overline">Task Definition</p>
+          <h3>Context-aware masked span recovery</h3>
+          <p>
+            Each instance replaces a numerical span in a sentence with <code>[MASK]</code>. The model must restore the value using:
+            the source table, its pre-text, and the preceding/following sentences.
+          </p>
+        </article>
+        <article class="card">
+          <p class="overline">Design Guardrails</p>
+          <h3>Uniqueness · Consistency · Answerability</h3>
+          <p>
+            Spans are retained only if they have a unique solution, align with nearby evidence, and are solvable from the provided context—preventing over-penalization from ambiguous phrasing.
+          </p>
+        </article>
+        <article class="card">
+          <p class="overline">Reasoning Profiles</p>
+          <h3>From lookups to multivariate logic</h3>
+          <p>
+            Instances cover four reasoning levels: direct lookup, comparative change, bivariate ratios, and multi-step calculations.
+            Models self-report scenario labels, aggregated over correct responses.
+          </p>
+        </article>
+      </div>
+      <div class="figure-grid">
+        <figure class="figure-card surface">
+          <img src="static/task_formulation.png" alt="Task formulation overview for FAITH masked span recovery">
+          <figcaption>Task formulation illustration from the paper, showing how spans are masked and recovered with surrounding context and linked tables.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="dataset">
+      <div class="section-header">
+        <p class="eyebrow">Dataset</p>
+        <h2>Built from Item 7 sections of S&amp;P 500 10-K filings</h2>
+      </div>
+      <div class="dataset-layout">
+        <div class="dataset-summary">
+          <h3>Pilot vs. Main split</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Pilot</th>
+                <th>Main</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Companies</td>
+                <td>9</td>
+                <td>453</td>
+              </tr>
+              <tr>
+                <td>Avg. context length</td>
+                <td>14,148 chars</td>
+                <td>12,843 chars</td>
+              </tr>
+              <tr>
+                <td>Avg. tables per filing</td>
+                <td>14.9</td>
+                <td>19.2</td>
+              </tr>
+              <tr>
+                <td>Sentences</td>
+                <td>164</td>
+                <td>1,122</td>
+              </tr>
+              <tr>
+                <td>Answerable spans</td>
+                <td>300</td>
+                <td>2,406</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="footnote">Answerability validated with GPT-4.1, Claude Sonnet, and Gemini Pro; human audit on the pilot split.</p>
+        </div>
+        <div class="dataset-details">
+          <h3>Instance schema</h3>
+          <pre><code>{
+  "metadata": {"cik": "1800", "filing_date": "2024-02-16"},
+  "tables": [{"pre_text": "The following table...", "cells": [["Header1", "Header2"]]}],
+  "instances": [{
+    "uid": "...",
+    "masked_sentence": "Total reserves were [MASK] ...",
+    "ground_truth": "55.5 MMBOE",
+    "mask_type": "A",
+    "mask_span": [182, 192]
+  }]
+}</code></pre>
+          <ul class="bullet-list">
+            <li>Tables keep both structure and lead-in text to preserve reporting context.</li>
+            <li>Instances capture neighboring sentences to anchor reasoning and reduce spurious spans.</li>
+            <li>Unit groups handle currencies, magnitudes (k/mn/bn), percentages, energy units, and rate postfixes.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="evaluation">
+      <div class="section-header">
+        <p class="eyebrow">Evaluation</p>
+        <h2>Precision-relaxed scoring for financial numerics</h2>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <p class="overline">Numeric Matching</p>
+          <p>Normalize values by parsing magnitudes (thousand/million/billion), determine precision from least significant digits, and compare at the coarser precision to avoid unfair rounding penalties.</p>
+        </article>
+        <article class="card">
+          <p class="overline">Unit Matching</p>
+          <p>Aliases for currencies, percentages, basis points, energy units, and rate postfixes are grouped so equivalent expressions—e.g., “USD 1.23 billion” vs. “$1,230 million”—are treated consistently.</p>
+        </article>
+        <article class="card">
+          <p class="overline">Model Study</p>
+          <p>Benchmarked GPT-4.1, Claude Sonnet-4, and Gemini 2.5 Pro on both pilot and main splits, with scenario-level breakdowns to surface where reasoning depth drives intrinsic hallucinations.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- <section class="section" id="paper-insights">
+      <div class="section-header">
+        <p class="eyebrow">Paper Insights</p>
+        <h2>Key tables excerpted from the FAITH paper</h2>
+      </div>
+      <div class="two-col">
+        <div class="surface table-card">
+          <h3>LLM vs. Human Answerability Agreement (Table 1)</h3>
+          <p class="footnote">Counts from the paper’s pilot study comparing 3 LLM annotators with human labels.</p>
+          <table class="table-compact">
+            <thead>
+              <tr>
+                <th>LLM vote pattern</th>
+                <th>Human Yes</th>
+                <th>Human No</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>All 3 No</td>
+                <td>1</td>
+                <td>626</td>
+                <td>627</td>
+              </tr>
+              <tr>
+                <td>All 3 Yes</td>
+                <td>276</td>
+                <td>11</td>
+                <td>287</td>
+              </tr>
+              <tr>
+                <td>2 Yes / 1 No</td>
+                <td>12</td>
+                <td>23</td>
+                <td>35</td>
+              </tr>
+              <tr>
+                <td>1 Yes / 2 No</td>
+                <td>11</td>
+                <td>164</td>
+                <td>175</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>300</td>
+                <td>824</td>
+                <td>1124</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="surface table-card">
+          <h3>Main Split Accuracy Highlights (Table 3)</h3>
+          <p class="footnote">Overall accuracy and multivariate (Scenario D) performance reported in Table 3 of the paper.</p>
+          <table class="table-compact">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Main Split Overall</th>
+                <th>Scenario D (multi-step)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Claude-Sonnet-4</td>
+                <td>95.6%</td>
+                <td>80.0%</td>
+              </tr>
+              <tr>
+                <td>Gemini-2.5-Pro</td>
+                <td>91.9%</td>
+                <td>90.0%</td>
+              </tr>
+              <tr>
+                <td>GPT-4.1</td>
+                <td>89.2%</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>GPT-4.1-mini</td>
+                <td>88.2%</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Llama-3.1-8B</td>
+                <td>47.5%</td>
+                <td>≈0%</td>
+              </tr>
+              <tr>
+                <td>Qwen-3-8B</td>
+                <td>30.6%</td>
+                <td>≈0%</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="footnote">Dash denotes the paper did not specify the exact Scenario D value for that model; ≈0% indicates near-zero scores noted in the paper.</p>
+        </div>
+      </div>
+    </section> -->
+
+    <section class="section" id="usage">
+      <div class="section-header">
+        <p class="eyebrow">Reproduce</p>
+        <h2>Use FAITH in your own evaluation loop</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>1) Generate prompts</h3>
+          <pre><code>python src/formulate_prompt.py \
+  --dataset_path data/main.json \
+  --prompt_template_path src/prompt.yaml \
+  --unit_group_path src/unit_groups.yaml \
+  --table_format csv \
+  --output_path data/main_prompt.jsonl</code></pre>
+          <p>Outputs JSONL with system/user prompts and ground truth spans for direct inference.</p>
+        </div>
+        <div>
+          <h3>2) Evaluate predictions</h3>
+          <pre><code>python src/eval.py \
+  --dataset_path data/main_prompt.jsonl \
+  --prediction_path data/main_prediction.jsonl \
+  --unit_group_path src/unit_groups.yaml</code></pre>
+          <p>Reports accuracy with numeric tolerance and unit normalization; configure <code>unit_groups.yaml</code> to extend domain coverage.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="team">
+      <div class="section-header">
+        <p class="eyebrow">Team</p>
+        <h2>Asian Institute of Digital Finance · National University of Singapore</h2>
+      </div>
+      <div class="team-inline">
+        <span class="name-chip">Mengao Zhang</span>
+        <span class="name-chip">Jiayu Fu</span>
+        <span class="name-chip">Tanya Warrier</span>
+        <span class="name-chip">Yuwen Wang</span>
+        <span class="name-chip">Tianhui Tan</span>
+        <span class="name-chip">Ke-Wei Huang</span>
+      </div>
+    </section>
+
+    <section class="section" id="citation">
+      <div class="section-header">
+        <p class="eyebrow">Citation</p>
+        <h2>Reference FAITH in your work</h2>
+      </div>
+      <div class="citation-notes">
+        <p>The FAITH dataset is under the license of <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons (CC BY) Attribution 4.0 International</a>.</p>
+        <p>For more information, please contact the author: Mengao Zhang <a href="mailto:mengaoz@nus.edu.sg">mengaoz@nus.edu.sg</a>.</p>
+        <p>Please kindly cite our work if you use our dataset or codes, thank you.</p>
+      </div>
+      <pre class="citation"><code>@inproceedings{faith2025,
+  title        = {FAITH: A Framework for Assessing Intrinsic Tabular Hallucinations in Finance},
+  author       = {Mengao Zhang and Jiayu Fu and Tanya Warrier and Yuwen Wang and Tianhui Tan and Ke-wei Huang},
+  booktitle    = {ACM International Conference on AI in Finance (ICAIF)},
+  year         = {2025},
+  url          = {https://www.arxiv.org/abs/2508.05201}
+}</code></pre>
+    </section>
+  </main>
+
+  <!-- <footer class="footer">
+    <div>
+      <p class="brand-mark">FAITH</p>
+      <p>Intrinsic hallucination evaluation for financial tabular reasoning.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#top">Back to top</a>
+      <a href="https://www.arxiv.org/abs/2508.05201" target="_blank" rel="noopener">Paper</a>
+      <a href="https://github.com/ZHANG-MENGAO/FAITH" target="_blank" rel="noopener">Repository</a>
+    </div>
+  </footer> -->
+
+  <div class="legal-footer">
+    Copyright © 2025 AIDF / <a href="https://nus.edu.sg/ormc/personal-data-protection/nus-privacy-notice" target="_blank" rel="noopener">Privacy Policy</a> / Terms &amp; Conditions
+  </div>
+
+</body>
+</html>
